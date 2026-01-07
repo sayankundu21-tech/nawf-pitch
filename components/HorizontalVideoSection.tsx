@@ -88,19 +88,19 @@ const Lightbox = ({ src, onClose }: { src: string | null, onClose: () => void })
   if (!src && !isActive) return null;
 
   return (
-    <div 
-      className={`fixed inset-0 z-[10000] flex items-center justify-center bg-black/95 backdrop-blur-xl transition-opacity duration-500 ${src ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+    <div
+      className={`fixed inset-0 z-[10000] flex items-center justify-center bg-black transition-opacity duration-500 ${src ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
       onClick={onClose}
     >
-      <div className="relative max-w-[95vw] max-h-[95vh] p-2 flex flex-col items-center">
+      <div className="relative w-full h-full flex items-center justify-center p-4">
         {src && (
-            <img 
-                src={src} 
-                alt="Full Screen View" 
-                className="w-auto h-auto max-w-full max-h-[85vh] object-contain rounded-sm shadow-2xl select-none"
+            <img
+                src={src}
+                alt="Full Screen View"
+                className="max-w-[98vw] max-h-[98vh] object-contain select-none"
             />
         )}
-        <div className="mt-6 text-center">
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2">
              <span className="font-mono text-[10px] text-white/40 tracking-[0.2em] uppercase border border-white/10 px-3 py-1 rounded-full">Click anywhere to close</span>
         </div>
       </div>

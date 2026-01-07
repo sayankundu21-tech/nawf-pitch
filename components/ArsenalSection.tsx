@@ -1,80 +1,39 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 
 gsap.registerPlugin(ScrollTrigger);
 
-interface NodeData {
-  id: string;
-  label: string;
-  group: 'left' | 'right' | 'bottom';
-}
-
-const LEFT_NODES: NodeData[] = [
-  { id: 'ultra-realistic', label: 'ULTRA REALISTIC', group: 'left' },
-  { id: 'photography', label: 'PHOTOGRAPHY', group: 'left' },
-  { id: 'cinematic', label: 'CINEMATIC STORY-TELLING', group: 'left' },
-  { id: 'influencers', label: 'INFLUENCERS / CELEBS / YOUTUBERS PARTNERSHIP', group: 'left' },
-];
-
-const RIGHT_NODES: NodeData[] = [
-  { id: 'cost-effective', label: 'COST EFFECTIVE', group: 'right' },
-  { id: 'no-production', label: 'NO REAL-TIME PRODUCTION SETUP', group: 'right' },
-  { id: 'no-crew', label: 'NO CREW', group: 'right' },
-  { id: 'time-efficient', label: 'TIME-EFFICIENT + HIGH-VELOCITY DELIVERY', group: 'right' },
-  { id: 'commercial-ads', label: 'COMMERCIAL ADS', group: 'right' },
-  { id: 'ready-campaigns', label: 'READY-TO-GO AD CAMPAIGNS', group: 'right' },
-];
-
-const BOTTOM_NODES: NodeData[] = [
-  { id: 'synchronous', label: 'SYNCHRONOUS (THE OVERLAP)', group: 'bottom' },
-  { id: 'versatile', label: 'VERSATILE', group: 'bottom' },
-];
-
 const ArsenalSection: React.FC = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
-  const headingRef = useRef<HTMLDivElement>(null);
-  const centralNodeRef = useRef<HTMLDivElement>(null);
-  const svgRef = useRef<SVGSVGElement>(null);
-  const [hoveredGroup, setHoveredGroup] = useState<string | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
     const section = sectionRef.current;
-    const heading = headingRef.current;
-    const central = centralNodeRef.current;
-    const svg = svgRef.current;
-    if (!section || !heading || !central || !svg) return;
+    if (!section) return;
 
-    const leftNodes = gsap.utils.toArray<HTMLElement>('.arsenal-node-left');
-    const rightNodes = gsap.utils.toArray<HTMLElement>('.arsenal-node-right');
-    const bottomNodes = gsap.utils.toArray<HTMLElement>('.arsenal-node-bottom');
-    const leftLines = svg.querySelectorAll('.connector-line-left');
-    const rightLines = svg.querySelectorAll('.connector-line-right');
-    const bottomLines = svg.querySelectorAll('.connector-line-bottom');
+    const heading = section.querySelector('.arsenal-heading');
+    const coreCard = section.querySelector('.arsenal-core');
+    const creativeRows = gsap.utils.toArray<HTMLElement>('.arsenal-creative-row');
+    const efficiencyBlock = section.querySelector('.arsenal-efficiency-block');
+    const efficiencyItems = gsap.utils.toArray<HTMLElement>('.arsenal-efficiency-item');
+    const resolutionBlock = section.querySelector('.arsenal-resolution');
 
-    [...leftLines, ...rightLines, ...bottomLines].forEach((line) => {
-      const pathEl = line as SVGPathElement;
-      const length = pathEl.getTotalLength ? pathEl.getTotalLength() : 200;
-      gsap.set(line, {
-        strokeDasharray: length,
-        strokeDashoffset: length,
-        opacity: 0
-      });
-    });
-
-    gsap.set(heading, { opacity: 0, y: 30 });
-    gsap.set(central, { opacity: 0, scale: 0.97, y: 20 });
-    gsap.set([...leftNodes, ...rightNodes, ...bottomNodes], { opacity: 0, y: 20, scale: 0.97 });
+    gsap.set(heading, { opacity: 0, y: 40 });
+    gsap.set(coreCard, { opacity: 0, y: 30, scale: 0.98 });
+    gsap.set(creativeRows, { opacity: 0, y: 24 });
+    gsap.set(efficiencyBlock, { opacity: 0, y: 24 });
+    gsap.set(efficiencyItems, { opacity: 0, y: 20 });
+    gsap.set(resolutionBlock, { opacity: 0, y: 24, scale: 0.97 });
 
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: section,
         start: 'top top',
-        end: '+=4000',
+        end: '+=5500',
         pin: true,
-        scrub: 0.8,
+        scrub: 0.6,
         anticipatePin: 1
       }
     });
@@ -82,147 +41,98 @@ const ArsenalSection: React.FC = () => {
     tl.to(heading, {
       opacity: 1,
       y: 0,
-      duration: 0.3,
+      duration: 0.4,
       ease: 'power2.out'
     }, 0);
 
     tl.to(heading, {
-      y: -80,
-      scale: 0.9,
-      opacity: 0.7,
-      duration: 0.4,
+      opacity: 0.4,
+      y: -60,
+      scale: 0.85,
+      duration: 0.5,
       ease: 'power2.inOut'
-    }, 0.4);
-
-    tl.to(central, {
-      opacity: 1,
-      scale: 1,
-      y: 0,
-      duration: 0.4,
-      ease: 'power2.out'
     }, 0.5);
 
-    leftNodes.forEach((node, i) => {
-      const delay = 0.9 + i * 0.08;
-      tl.to(node, {
+    tl.to(coreCard, {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      duration: 0.5,
+      ease: 'power2.out'
+    }, 0.6);
+
+    tl.to(coreCard, {
+      y: -180,
+      scale: 0.9,
+      opacity: 0.6,
+      duration: 0.6,
+      ease: 'power2.inOut'
+    }, 1.2);
+
+    creativeRows.forEach((row, i) => {
+      const startTime = 1.4 + i * 0.35;
+      tl.to(row, {
         opacity: 1,
         y: 0,
-        scale: 1,
-        duration: 0.25,
-        ease: 'power2.out'
-      }, delay);
-    });
-
-    leftLines.forEach((line, i) => {
-      tl.to(line, {
-        strokeDashoffset: 0,
-        opacity: 0.4,
-        duration: 0.2,
-        ease: 'power2.inOut'
-      }, 1.0 + i * 0.06);
-    });
-
-    rightNodes.forEach((node, i) => {
-      const delay = 1.5 + i * 0.07;
-      tl.to(node, {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        duration: 0.25,
-        ease: 'power2.out'
-      }, delay);
-    });
-
-    rightLines.forEach((line, i) => {
-      tl.to(line, {
-        strokeDashoffset: 0,
-        opacity: 0.4,
-        duration: 0.2,
-        ease: 'power2.inOut'
-      }, 1.6 + i * 0.05);
-    });
-
-    bottomNodes.forEach((node, i) => {
-      const delay = 2.2 + i * 0.1;
-      tl.to(node, {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        duration: 0.25,
-        ease: 'power2.out'
-      }, delay);
-    });
-
-    bottomLines.forEach((line, i) => {
-      tl.to(line, {
-        strokeDashoffset: 0,
-        opacity: 0.4,
-        duration: 0.2,
-        ease: 'power2.inOut'
-      }, 2.3 + i * 0.08);
-    });
-
-    tl.to({}, { duration: 0.5 }, 2.6);
-
-  }, { scope: containerRef });
-
-  const handleNodeEnter = (group: string) => {
-    setHoveredGroup(group);
-
-    const central = centralNodeRef.current;
-    if (central) {
-      gsap.to(central, {
-        boxShadow: '0 0 60px rgba(220, 38, 38, 0.15), 0 0 100px rgba(220, 38, 38, 0.05)',
-        duration: 0.3,
-        ease: 'power2.out'
-      });
-    }
-
-    const relatedLines = document.querySelectorAll(`.connector-line-${group}`);
-    relatedLines.forEach(line => {
-      gsap.to(line, { opacity: 0.8, strokeWidth: 1.5, duration: 0.3 });
-    });
-
-    const otherGroups = ['left', 'right', 'bottom'].filter(g => g !== group);
-    otherGroups.forEach(g => {
-      const otherNodes = document.querySelectorAll(`.arsenal-node-${g}`);
-      const otherLines = document.querySelectorAll(`.connector-line-${g}`);
-      otherNodes.forEach(node => {
-        gsap.to(node, { opacity: 0.3, duration: 0.3 });
-      });
-      otherLines.forEach(line => {
-        gsap.to(line, { opacity: 0.15, duration: 0.3 });
-      });
-    });
-  };
-
-  const handleNodeLeave = () => {
-    setHoveredGroup(null);
-
-    const central = centralNodeRef.current;
-    if (central) {
-      gsap.to(central, {
-        boxShadow: '0 0 30px rgba(220, 38, 38, 0.08), 0 0 60px rgba(220, 38, 38, 0.02)',
         duration: 0.4,
         ease: 'power2.out'
-      });
-    }
+      }, startTime);
 
-    const allNodes = document.querySelectorAll('.arsenal-node-left, .arsenal-node-right, .arsenal-node-bottom');
-    const allLines = document.querySelectorAll('.connector-line');
-
-    allNodes.forEach(node => {
-      gsap.to(node, { opacity: 1, duration: 0.4 });
+      if (i < creativeRows.length - 1) {
+        tl.to(row, {
+          opacity: 0.3,
+          y: -30,
+          duration: 0.3,
+          ease: 'power2.inOut'
+        }, startTime + 0.3);
+      }
     });
-    allLines.forEach(line => {
-      gsap.to(line, { opacity: 0.4, strokeWidth: 1, duration: 0.4 });
-    });
-  };
 
-  const getNodeOpacity = (group: string) => {
-    if (!hoveredGroup) return 1;
-    return hoveredGroup === group ? 1 : 0.3;
-  };
+    const efficiencyStart = 1.4 + creativeRows.length * 0.35 + 0.2;
+
+    tl.to(creativeRows[creativeRows.length - 1], {
+      opacity: 0.3,
+      y: -30,
+      duration: 0.3,
+      ease: 'power2.inOut'
+    }, efficiencyStart - 0.1);
+
+    tl.to(efficiencyBlock, {
+      opacity: 1,
+      y: 0,
+      duration: 0.5,
+      ease: 'power2.out'
+    }, efficiencyStart);
+
+    efficiencyItems.forEach((item, i) => {
+      tl.to(item, {
+        opacity: 1,
+        y: 0,
+        duration: 0.35,
+        ease: 'power2.out'
+      }, efficiencyStart + 0.5 + i * 0.25);
+    });
+
+    const resolutionStart = efficiencyStart + 0.5 + efficiencyItems.length * 0.25 + 0.3;
+
+    tl.to([efficiencyBlock, ...efficiencyItems], {
+      opacity: 0.25,
+      y: -20,
+      duration: 0.4,
+      ease: 'power2.inOut'
+    }, resolutionStart - 0.2);
+
+    tl.to(resolutionBlock, {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      duration: 0.6,
+      ease: 'power2.out'
+    }, resolutionStart);
+
+    tl.to({}, { duration: 0.8 }, resolutionStart + 0.6);
+
+  }, { scope: containerRef });
 
   return (
     <section
@@ -231,110 +141,114 @@ const ArsenalSection: React.FC = () => {
     >
       <div
         ref={containerRef}
-        className="relative w-full h-screen flex items-center justify-center"
+        className="relative w-full h-screen flex flex-col items-center justify-center"
       >
         <div
-          className="absolute inset-0 pointer-events-none opacity-[0.08]"
+          className="absolute inset-0 pointer-events-none opacity-[0.06]"
           style={{
             backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.5) 1px, transparent 1px)',
-            backgroundSize: '32px 32px'
+            backgroundSize: '40px 40px'
           }}
         />
 
-        <div
-          ref={headingRef}
-          className="absolute top-[38%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-30"
-          style={{ opacity: 0 }}
-        >
-          <h2 className="font-mono text-lg md:text-xl lg:text-2xl uppercase tracking-[0.15em] text-white/90 text-center whitespace-nowrap">
+        <div className="arsenal-heading absolute top-[42%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 px-6">
+          <h2 className="font-mono text-xl md:text-2xl lg:text-3xl uppercase tracking-[0.12em] text-white/90 text-center leading-relaxed">
             WHAT WILL YOU GET ASSOCIATING WITH NAWF?
           </h2>
         </div>
 
-        <svg
-          ref={svgRef}
-          className="hidden lg:block absolute inset-0 w-full h-full pointer-events-none"
-          viewBox="0 0 1600 900"
-          preserveAspectRatio="xMidYMid slice"
-        >
-          <path className="connector-line connector-line-left" d="M 340 340 Q 480 370 640 420" fill="none" stroke="#dc2626" strokeWidth="1" />
-          <path className="connector-line connector-line-left" d="M 340 400 Q 460 415 640 435" fill="none" stroke="#dc2626" strokeWidth="1" />
-          <path className="connector-line connector-line-left" d="M 340 460 Q 480 458 640 450" fill="none" stroke="#dc2626" strokeWidth="1" />
-          <path className="connector-line connector-line-left" d="M 340 520 Q 460 505 640 465" fill="none" stroke="#dc2626" strokeWidth="1" />
-
-          <path className="connector-line connector-line-right" d="M 960 420 Q 1100 330 1260 265" fill="none" stroke="#dc2626" strokeWidth="1" />
-          <path className="connector-line connector-line-right" d="M 960 432 Q 1120 370 1260 325" fill="none" stroke="#dc2626" strokeWidth="1" />
-          <path className="connector-line connector-line-right" d="M 960 444 Q 1100 410 1260 385" fill="none" stroke="#dc2626" strokeWidth="1" />
-          <path className="connector-line connector-line-right" d="M 960 456 Q 1100 470 1260 445" fill="none" stroke="#dc2626" strokeWidth="1" />
-          <path className="connector-line connector-line-right" d="M 960 468 Q 1100 530 1260 505" fill="none" stroke="#dc2626" strokeWidth="1" />
-          <path className="connector-line connector-line-right" d="M 960 480 Q 1100 580 1260 565" fill="none" stroke="#dc2626" strokeWidth="1" />
-
-          <path className="connector-line connector-line-bottom" d="M 760 490 Q 720 580 620 680" fill="none" stroke="#dc2626" strokeWidth="1" />
-          <path className="connector-line connector-line-bottom" d="M 840 490 Q 880 580 980 680" fill="none" stroke="#dc2626" strokeWidth="1" />
-        </svg>
-
-        <div
-          ref={centralNodeRef}
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 px-10 py-6 md:px-14 md:py-7 border border-red-600/40 bg-[#0a0a0a] z-20"
-          style={{
-            opacity: 0,
-            boxShadow: '0 0 30px rgba(220, 38, 38, 0.08), 0 0 60px rgba(220, 38, 38, 0.02)'
-          }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-br from-red-600/5 to-transparent" />
-          <div className="relative text-center">
-            <span className="font-mono text-sm md:text-base uppercase tracking-[0.2em] text-white/95 font-medium whitespace-nowrap">
+        <div className="arsenal-core absolute top-[50%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 px-6">
+          <div className="px-12 py-8 md:px-16 md:py-10 border border-red-600/30 bg-[#080808]">
+            <div className="absolute inset-0 bg-gradient-to-br from-red-600/5 to-transparent pointer-events-none" />
+            <span className="font-mono text-base md:text-lg lg:text-xl uppercase tracking-[0.2em] text-white/95 whitespace-nowrap">
               <span className="text-red-500">AI</span> 360° Content Arsenal
             </span>
           </div>
         </div>
 
-        <div className="absolute left-[6%] lg:left-[8%] top-1/2 -translate-y-1/2 flex flex-col gap-4 lg:gap-5 items-start z-10">
-          {LEFT_NODES.map((node) => (
-            <div
-              key={node.id}
-              className="arsenal-node-left px-5 py-3.5 border border-white/10 bg-[#080808]/90 cursor-pointer select-none transition-colors duration-300"
-              style={{ opacity: 0 }}
-              onMouseEnter={() => handleNodeEnter('left')}
-              onMouseLeave={handleNodeLeave}
-            >
-              <span className="font-mono text-[10px] md:text-xs uppercase tracking-[0.1em] text-white/70 whitespace-nowrap">
-                {node.label}
-              </span>
-            </div>
-          ))}
+        <div className="arsenal-creative-row absolute top-[50%] left-[8%] md:left-[12%] -translate-y-1/2 z-10">
+          <div className="relative">
+            <div className="w-12 h-px bg-red-600/30 absolute -left-16 top-1/2 hidden md:block" />
+            <span className="font-mono text-lg md:text-xl lg:text-2xl uppercase tracking-[0.15em] text-white/85">
+              ULTRA REALISTIC
+            </span>
+          </div>
         </div>
 
-        <div className="absolute right-[6%] lg:right-[8%] top-1/2 -translate-y-1/2 flex flex-col gap-4 lg:gap-5 items-end z-10">
-          {RIGHT_NODES.map((node) => (
-            <div
-              key={node.id}
-              className="arsenal-node-right px-5 py-3.5 border border-white/10 bg-[#080808]/90 cursor-pointer select-none transition-colors duration-300"
-              style={{ opacity: 0 }}
-              onMouseEnter={() => handleNodeEnter('right')}
-              onMouseLeave={handleNodeLeave}
-            >
-              <span className="font-mono text-[10px] md:text-xs uppercase tracking-[0.1em] text-white/70 whitespace-nowrap">
-                {node.label}
-              </span>
-            </div>
-          ))}
+        <div className="arsenal-creative-row absolute top-[50%] right-[8%] md:right-[12%] -translate-y-1/2 z-10 text-right">
+          <div className="relative">
+            <div className="w-12 h-px bg-red-600/30 absolute -right-16 top-1/2 hidden md:block" />
+            <span className="font-mono text-lg md:text-xl lg:text-2xl uppercase tracking-[0.15em] text-white/85">
+              PHOTOGRAPHY
+            </span>
+          </div>
         </div>
 
-        <div className="absolute bottom-[8%] lg:bottom-[12%] left-1/2 -translate-x-1/2 flex gap-8 lg:gap-12 z-10">
-          {BOTTOM_NODES.map((node) => (
-            <div
-              key={node.id}
-              className="arsenal-node-bottom px-5 py-3.5 border border-white/10 bg-[#080808]/90 cursor-pointer select-none transition-colors duration-300"
-              style={{ opacity: 0 }}
-              onMouseEnter={() => handleNodeEnter('bottom')}
-              onMouseLeave={handleNodeLeave}
-            >
-              <span className="font-mono text-[10px] md:text-xs uppercase tracking-[0.1em] text-white/70 whitespace-nowrap">
-                {node.label}
+        <div className="arsenal-creative-row absolute top-[50%] left-[8%] md:left-[12%] -translate-y-1/2 z-10">
+          <div className="relative">
+            <div className="w-12 h-px bg-red-600/30 absolute -left-16 top-1/2 hidden md:block" />
+            <span className="font-mono text-lg md:text-xl lg:text-2xl uppercase tracking-[0.15em] text-white/85">
+              CINEMATIC STORY-TELLING
+            </span>
+          </div>
+        </div>
+
+        <div className="arsenal-creative-row absolute top-[50%] right-[8%] md:right-[12%] -translate-y-1/2 z-10 text-right">
+          <div className="relative">
+            <div className="w-12 h-px bg-red-600/30 absolute -right-16 top-1/2 hidden md:block" />
+            <span className="font-mono text-lg md:text-xl lg:text-2xl uppercase tracking-[0.15em] text-white/85">
+              INFLUENCERS / CELEBS / YOUTUBERS PARTNERSHIP
+            </span>
+          </div>
+        </div>
+
+        <div className="arsenal-efficiency-block absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-full max-w-2xl px-6">
+          <div className="border border-white/10 bg-[#080808]/80 px-10 py-8 md:px-14 md:py-10">
+            <h3 className="font-mono text-lg md:text-xl uppercase tracking-[0.15em] text-white/90 mb-6">
+              COST EFFECTIVE
+            </h3>
+            <div className="space-y-3 pl-4 border-l border-red-600/20">
+              <p className="font-mono text-sm md:text-base uppercase tracking-[0.1em] text-white/60">
+                No real-time Production setup
+              </p>
+              <p className="font-mono text-sm md:text-base uppercase tracking-[0.1em] text-white/60">
+                No Crew
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="arsenal-efficiency-item absolute top-[58%] left-[8%] md:left-[15%] z-10">
+          <span className="font-mono text-base md:text-lg lg:text-xl uppercase tracking-[0.12em] text-white/80">
+            TIME-EFFICIENT + HIGH-VELOCITY DELIVERY
+          </span>
+        </div>
+
+        <div className="arsenal-efficiency-item absolute top-[58%] right-[8%] md:right-[15%] z-10 text-right">
+          <span className="font-mono text-base md:text-lg lg:text-xl uppercase tracking-[0.12em] text-white/80">
+            COMMERCIAL ADS
+          </span>
+        </div>
+
+        <div className="arsenal-efficiency-item absolute top-[58%] left-1/2 -translate-x-1/2 z-10 text-center">
+          <span className="font-mono text-base md:text-lg lg:text-xl uppercase tracking-[0.12em] text-white/80">
+            READY TO GO AD CAMPAIGNS
+          </span>
+        </div>
+
+        <div className="arsenal-resolution absolute top-[50%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 text-center">
+          <div className="space-y-6">
+            <div className="px-10 py-5 border border-white/15 bg-[#080808]/90">
+              <span className="font-mono text-lg md:text-xl lg:text-2xl uppercase tracking-[0.15em] text-white/90">
+                SYNCHRONOUS (THE OVERLAP)
               </span>
             </div>
-          ))}
+            <div className="px-10 py-5 border border-white/15 bg-[#080808]/90">
+              <span className="font-mono text-lg md:text-xl lg:text-2xl uppercase tracking-[0.15em] text-white/90">
+                VERSATILE
+              </span>
+            </div>
+          </div>
         </div>
 
       </div>

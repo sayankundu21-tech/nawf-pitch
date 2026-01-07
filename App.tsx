@@ -2,6 +2,7 @@ import React from 'react';
 import HorizontalFlow from './components/HorizontalFlow';
 import VerticalSection from './components/VerticalSection';
 import HorizontalVideoSection from './components/HorizontalVideoSection';
+import TextRevealSection from './components/TextRevealSection';
 
 const App: React.FC = () => {
   return (
@@ -14,7 +15,10 @@ const App: React.FC = () => {
 
       {/* Third Section: Cinematic Video Horizontal Scroll */}
       <HorizontalVideoSection />
-      
+
+      {/* Fourth Section: Editorial Text Reveal */}
+      <TextRevealSection />
+
       {/* Footer / Scroll hint */}
       <div className="fixed bottom-8 left-8 z-50 mix-blend-difference pointer-events-none">
         <p className="font-mono text-xs text-white/50 uppercase tracking-widest">

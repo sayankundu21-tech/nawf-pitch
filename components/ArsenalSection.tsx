@@ -4,7 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const LINES = [
+const ITEMS = [
   'ULTRA REALISTIC',
   'PHOTOGRAPHY',
   'CINEMATIC STORY-TELLING',
@@ -21,67 +21,42 @@ const LINES = [
 
 const ArsenalSection: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const stackRef = useRef<HTMLDivElement>(null);
-  const linesRef = useRef<HTMLDivElement[]>([]);
+  const orbitRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLDivElement>(null);
+  const linesRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
+    const orbit = orbitRef.current;
     const title = titleRef.current;
-    const stack = stackRef.current;
     const lines = linesRef.current;
 
-    if (!section || !title || !stack || lines.length === 0) return;
+    if (!section || !orbit || !title || !lines) return;
 
     const ctx = gsap.context(() => {
-      gsap.set(title, { opacity: 0, y: 30 });
+      gsap.set([title, orbit, lines], { opacity: 0 });
 
-      gsap.to(title, {
+      gsap.to([title, orbit, lines], {
         opacity: 1,
-        y: 0,
-        duration: 0.8,
+        duration: 1,
+        stagger: 0.2,
         ease: 'power2.out',
         scrollTrigger: {
           trigger: section,
-          start: 'top 80%',
+          start: 'top 70%',
           toggleActions: 'play none none reverse',
         },
       });
 
-      const lineHeight = 80;
-      const totalHeight = lines.length * lineHeight;
-      const startOffset = totalHeight / 2;
-
-      gsap.set(stack, { y: startOffset });
-
-      ScrollTrigger.create({
-        trigger: section,
-        start: 'top top',
-        end: 'bottom bottom',
-        scrub: 0.3,
-        onUpdate: (self) => {
-          const progress = self.progress;
-          const yMove = -totalHeight * progress;
-          gsap.set(stack, { y: startOffset + yMove });
-
-          const viewportCenter = window.innerHeight / 2;
-          const stackRect = stack.getBoundingClientRect();
-          const stackTop = stackRect.top;
-
-          lines.forEach((line, index) => {
-            const lineCenter = stackTop + index * lineHeight + lineHeight / 2;
-            const distanceFromCenter = Math.abs(viewportCenter - lineCenter);
-            const maxDistance = lineHeight * 2;
-            const normalizedDistance = Math.min(distanceFromCenter / maxDistance, 1);
-
-            const opacity = 1 - normalizedDistance * 0.75;
-            const scale = 1 + (1 - normalizedDistance) * 0.08;
-
-            gsap.set(line, {
-              opacity: opacity,
-              scale: scale,
-            });
-          });
+      gsap.to([orbit, lines], {
+        rotation: 360,
+        duration: 1,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: 0.5,
         },
       });
     }, section);
@@ -89,69 +64,110 @@ const ArsenalSection: React.FC = () => {
     return () => ctx.revert();
   }, []);
 
+  const radius = 320;
+  const angleStep = 360 / ITEMS.length;
+
   return (
     <section
       ref={sectionRef}
       className="relative w-full bg-black"
       style={{ height: '200vh' }}
     >
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col items-center justify-center">
-        <h2
-          ref={titleRef}
-          className="absolute top-[12%] left-1/2 -translate-x-1/2 z-20 text-white/90 text-center px-6"
-          style={{
-            fontFamily: 'system-ui, -apple-system, sans-serif',
-            fontSize: 'clamp(1rem, 2.5vw, 1.5rem)',
-            fontWeight: 400,
-            letterSpacing: '0.2em',
-            textTransform: 'uppercase',
-          }}
-        >
-          What will you get associating with NAWF?
-        </h2>
-
-        <div
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none"
-        >
+      <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
+        <div className="relative" style={{ width: radius * 2 + 200, height: radius * 2 + 200 }}>
           <div
-            className="w-2 h-2 rounded-full"
-            style={{
-              backgroundColor: '#3b82f6',
-              boxShadow: '0 0 12px 4px rgba(59, 130, 246, 0.4)',
-            }}
-          />
-        </div>
-
-        <div
-          ref={stackRef}
-          className="relative z-10"
-          style={{
-            transform: 'rotate(-12deg)',
-            transformOrigin: 'center center',
-          }}
-        >
-          {LINES.map((text, index) => (
-            <div
-              key={index}
-              ref={(el) => {
-                if (el) linesRef.current[index] = el;
-              }}
-              className="whitespace-nowrap text-center"
+            ref={titleRef}
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 text-center"
+          >
+            <span
+              className="block text-white"
               style={{
                 fontFamily: 'system-ui, -apple-system, sans-serif',
-                fontSize: 'clamp(1.5rem, 4vw, 3.5rem)',
-                fontWeight: 500,
-                letterSpacing: '0.08em',
-                color: 'white',
-                opacity: 0.25,
-                height: '80px',
-                lineHeight: '80px',
-                textTransform: 'uppercase',
+                fontSize: 'clamp(1rem, 2vw, 1.25rem)',
+                fontWeight: 300,
+                letterSpacing: '0.15em',
+                marginBottom: '8px',
               }}
             >
-              {text}
-            </div>
-          ))}
+              AI 360°
+            </span>
+            <span
+              className="block text-white"
+              style={{
+                fontFamily: 'system-ui, -apple-system, sans-serif',
+                fontSize: 'clamp(1.25rem, 3vw, 2rem)',
+                fontWeight: 500,
+                letterSpacing: '0.08em',
+              }}
+            >
+              Content Arsenal
+            </span>
+          </div>
+
+          <svg
+            ref={linesRef}
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
+            width={radius * 2 + 200}
+            height={radius * 2 + 200}
+            style={{ transformOrigin: 'center center' }}
+          >
+            {ITEMS.map((_, index) => {
+              const angle = (index * angleStep - 90) * (Math.PI / 180);
+              const centerX = radius + 100;
+              const centerY = radius + 100;
+              const endX = centerX + Math.cos(angle) * (radius - 40);
+              const endY = centerY + Math.sin(angle) * (radius - 40);
+
+              return (
+                <line
+                  key={index}
+                  x1={centerX}
+                  y1={centerY}
+                  x2={endX}
+                  y2={endY}
+                  stroke="rgba(255,255,255,0.2)"
+                  strokeWidth="1"
+                />
+              );
+            })}
+          </svg>
+
+          <div
+            ref={orbitRef}
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
+            style={{
+              width: radius * 2,
+              height: radius * 2,
+              transformOrigin: 'center center',
+            }}
+          >
+            {ITEMS.map((text, index) => {
+              const angle = index * angleStep - 90;
+              const rad = angle * (Math.PI / 180);
+              const x = Math.cos(rad) * radius;
+              const y = Math.sin(rad) * radius;
+
+              return (
+                <div
+                  key={index}
+                  className="absolute whitespace-nowrap"
+                  style={{
+                    left: '50%',
+                    top: '50%',
+                    transform: `translate(-50%, -50%) translate(${x}px, ${y}px) rotate(${-angle - 90}deg)`,
+                    fontFamily: 'system-ui, -apple-system, sans-serif',
+                    fontSize: 'clamp(0.6rem, 1.2vw, 0.85rem)',
+                    fontWeight: 400,
+                    letterSpacing: '0.05em',
+                    color: 'rgba(255,255,255,0.7)',
+                    textAlign: 'center',
+                  }}
+                >
+                  {text}
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>

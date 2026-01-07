@@ -3,6 +3,7 @@ import HorizontalFlow from './components/HorizontalFlow';
 import VerticalSection from './components/VerticalSection';
 import HorizontalVideoSection from './components/HorizontalVideoSection';
 import TextRevealSection from './components/TextRevealSection';
+import VennSection from './components/VennSection';
 
 const App: React.FC = () => {
   return (
@@ -18,6 +19,9 @@ const App: React.FC = () => {
 
       {/* Fourth Section: Editorial Text Reveal */}
       <TextRevealSection />
+
+      {/* Fifth Section: NAWF Venn Diagram */}
+      <VennSection />
 
       {/* Footer / Scroll hint */}
       <div className="fixed bottom-8 left-8 z-50 mix-blend-difference pointer-events-none">

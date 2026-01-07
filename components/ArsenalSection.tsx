@@ -216,7 +216,7 @@ const ArsenalSection: React.FC = () => {
     >
       <div
         ref={containerRef}
-        className="relative w-full h-screen flex items-center justify-center"
+        className="relative w-full h-screen"
       >
         <div
           className="absolute inset-0 pointer-events-none opacity-20"
@@ -229,95 +229,87 @@ const ArsenalSection: React.FC = () => {
         <svg
           ref={svgRef}
           className="hidden md:block absolute inset-0 w-full h-full pointer-events-none"
-          viewBox="0 0 1200 800"
-          preserveAspectRatio="xMidYMid meet"
+          viewBox="0 0 1600 900"
+          preserveAspectRatio="xMidYMid slice"
         >
-          <path id="line-ultra-realistic" className="connector-line connector-line-left" d="M 320 280 Q 450 300 520 380" fill="none" stroke="#dc2626" strokeWidth="1" />
-          <path id="line-photography" className="connector-line connector-line-left" d="M 320 340 Q 420 350 520 390" fill="none" stroke="#dc2626" strokeWidth="1" />
-          <path id="line-cinematic" className="connector-line connector-line-left" d="M 320 400 Q 420 400 520 400" fill="none" stroke="#dc2626" strokeWidth="1" />
-          <path id="line-influencers" className="connector-line connector-line-left" d="M 320 460 Q 420 450 520 420" fill="none" stroke="#dc2626" strokeWidth="1" />
+          <path id="line-ultra-realistic" className="connector-line connector-line-left" d="M 350 320 Q 500 350 680 420" fill="none" stroke="#dc2626" strokeWidth="1" />
+          <path id="line-photography" className="connector-line connector-line-left" d="M 350 390 Q 480 400 680 435" fill="none" stroke="#dc2626" strokeWidth="1" />
+          <path id="line-cinematic" className="connector-line connector-line-left" d="M 350 460 Q 500 455 680 450" fill="none" stroke="#dc2626" strokeWidth="1" />
+          <path id="line-influencers" className="connector-line connector-line-left" d="M 350 530 Q 480 510 680 465" fill="none" stroke="#dc2626" strokeWidth="1" />
 
-          <path id="line-cost-effective" className="connector-line connector-line-right" d="M 680 380 Q 750 300 880 270" fill="none" stroke="#dc2626" strokeWidth="1" />
-          <path id="line-no-production" className="connector-line connector-line-right" d="M 680 390 Q 780 340 880 320" fill="none" stroke="#dc2626" strokeWidth="1" />
-          <path id="line-no-crew" className="connector-line connector-line-right" d="M 680 400 Q 780 380 880 370" fill="none" stroke="#dc2626" strokeWidth="1" />
-          <path id="line-time-efficient" className="connector-line connector-line-right" d="M 680 410 Q 780 420 880 420" fill="none" stroke="#dc2626" strokeWidth="1" />
-          <path id="line-commercial-ads" className="connector-line connector-line-right" d="M 680 420 Q 780 460 880 470" fill="none" stroke="#dc2626" strokeWidth="1" />
-          <path id="line-ready-campaigns" className="connector-line connector-line-right" d="M 680 430 Q 780 500 880 520" fill="none" stroke="#dc2626" strokeWidth="1" />
+          <path id="line-cost-effective" className="connector-line connector-line-right" d="M 920 420 Q 1050 310 1250 240" fill="none" stroke="#dc2626" strokeWidth="1" />
+          <path id="line-no-production" className="connector-line connector-line-right" d="M 920 435 Q 1080 360 1250 310" fill="none" stroke="#dc2626" strokeWidth="1" />
+          <path id="line-no-crew" className="connector-line connector-line-right" d="M 920 445 Q 1080 410 1250 380" fill="none" stroke="#dc2626" strokeWidth="1" />
+          <path id="line-time-efficient" className="connector-line connector-line-right" d="M 920 455 Q 1080 470 1250 450" fill="none" stroke="#dc2626" strokeWidth="1" />
+          <path id="line-commercial-ads" className="connector-line connector-line-right" d="M 920 465 Q 1080 530 1250 520" fill="none" stroke="#dc2626" strokeWidth="1" />
+          <path id="line-ready-campaigns" className="connector-line connector-line-right" d="M 920 480 Q 1080 590 1250 590" fill="none" stroke="#dc2626" strokeWidth="1" />
 
-          <path id="line-synchronous" className="connector-line connector-line-bottom" d="M 570 450 Q 540 520 500 580" fill="none" stroke="#dc2626" strokeWidth="1" />
-          <path id="line-versatile" className="connector-line connector-line-bottom" d="M 630 450 Q 660 520 700 580" fill="none" stroke="#dc2626" strokeWidth="1" />
+          <path id="line-synchronous" className="connector-line connector-line-bottom" d="M 750 490 Q 700 600 600 700" fill="none" stroke="#dc2626" strokeWidth="1" />
+          <path id="line-versatile" className="connector-line connector-line-bottom" d="M 850 490 Q 900 600 1000 700" fill="none" stroke="#dc2626" strokeWidth="1" />
         </svg>
 
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 md:px-8">
-          <div className="flex flex-col md:flex-row items-center md:items-start justify-center gap-8 md:gap-0">
-
-            <div className="flex flex-col gap-3 md:gap-4 items-center md:items-end md:w-[30%] md:pr-12 md:pt-16">
-              {LEFT_NODES.map((node) => (
-                <div
-                  key={node.id}
-                  className="arsenal-node-left px-4 py-3 border border-white/15 bg-white/[0.02] cursor-pointer select-none"
-                  style={{ opacity: 0 }}
-                  onMouseEnter={(e) => handleNodeEnter(e, node.id)}
-                  onMouseLeave={(e) => handleNodeLeave(e, node.id)}
-                >
-                  <span className="font-mono text-[10px] md:text-xs uppercase tracking-[0.12em] text-white/80 whitespace-nowrap">
-                    {node.label}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            <div className="flex flex-col items-center md:w-[40%] py-8 md:py-0">
-              <div
-                ref={centralNodeRef}
-                className="relative px-8 py-6 md:px-10 md:py-7 border-2 border-red-600/50 bg-[#080808]"
-                style={{ opacity: 0 }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-red-600/10 to-transparent" />
-                <div className="relative text-center">
-                  <span className="font-mono text-sm md:text-base uppercase tracking-[0.2em] text-white/95 font-medium">
-                    <span className="text-red-500 font-bold">AI</span> 360° Content Arsenal
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex flex-col md:flex-row gap-4 md:gap-8 mt-24 md:mt-40">
-                {BOTTOM_NODES.map((node) => (
-                  <div
-                    key={node.id}
-                    className="arsenal-node-bottom px-4 py-3 border border-white/15 bg-white/[0.02] cursor-pointer select-none"
-                    style={{ opacity: 0 }}
-                    onMouseEnter={(e) => handleNodeEnter(e, node.id)}
-                    onMouseLeave={(e) => handleNodeLeave(e, node.id)}
-                  >
-                    <span className="font-mono text-[10px] md:text-xs uppercase tracking-[0.12em] text-white/80 whitespace-nowrap">
-                      {node.label}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-3 md:gap-4 items-center md:items-start md:w-[30%] md:pl-12 md:pt-8">
-              {RIGHT_NODES.map((node) => (
-                <div
-                  key={node.id}
-                  className="arsenal-node-right px-4 py-3 border border-white/15 bg-white/[0.02] cursor-pointer select-none"
-                  style={{ opacity: 0 }}
-                  onMouseEnter={(e) => handleNodeEnter(e, node.id)}
-                  onMouseLeave={(e) => handleNodeLeave(e, node.id)}
-                >
-                  <span className="font-mono text-[10px] md:text-xs uppercase tracking-[0.12em] text-white/80 whitespace-nowrap">
-                    {node.label}
-                  </span>
-                </div>
-              ))}
-            </div>
-
+        <div
+          ref={centralNodeRef}
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 px-8 py-5 md:px-12 md:py-6 border-2 border-red-600/50 bg-[#080808] z-20"
+          style={{ opacity: 0 }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-red-600/10 to-transparent" />
+          <div className="relative text-center">
+            <span className="font-mono text-sm md:text-base uppercase tracking-[0.2em] text-white/95 font-medium whitespace-nowrap">
+              <span className="text-red-500 font-bold">AI</span> 360° Content Arsenal
+            </span>
           </div>
         </div>
 
-        <div className="md:hidden absolute left-1/2 top-[15%] bottom-[15%] w-px bg-gradient-to-b from-transparent via-red-600/30 to-transparent pointer-events-none" />
+        <div className="absolute left-[4%] md:left-[8%] top-1/2 -translate-y-1/2 flex flex-col gap-3 md:gap-4 items-start z-10">
+          {LEFT_NODES.map((node) => (
+            <div
+              key={node.id}
+              className="arsenal-node-left px-4 py-3 border border-white/15 bg-[#0a0a0a] cursor-pointer select-none"
+              style={{ opacity: 0 }}
+              onMouseEnter={(e) => handleNodeEnter(e, node.id)}
+              onMouseLeave={(e) => handleNodeLeave(e, node.id)}
+            >
+              <span className="font-mono text-[10px] md:text-xs uppercase tracking-[0.12em] text-white/80 whitespace-nowrap">
+                {node.label}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        <div className="absolute right-[4%] md:right-[8%] top-1/2 -translate-y-1/2 flex flex-col gap-3 md:gap-4 items-end z-10">
+          {RIGHT_NODES.map((node) => (
+            <div
+              key={node.id}
+              className="arsenal-node-right px-4 py-3 border border-white/15 bg-[#0a0a0a] cursor-pointer select-none"
+              style={{ opacity: 0 }}
+              onMouseEnter={(e) => handleNodeEnter(e, node.id)}
+              onMouseLeave={(e) => handleNodeLeave(e, node.id)}
+            >
+              <span className="font-mono text-[10px] md:text-xs uppercase tracking-[0.12em] text-white/80 whitespace-nowrap">
+                {node.label}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        <div className="absolute bottom-[10%] md:bottom-[12%] left-1/2 -translate-x-1/2 flex gap-6 md:gap-10 z-10">
+          {BOTTOM_NODES.map((node) => (
+            <div
+              key={node.id}
+              className="arsenal-node-bottom px-4 py-3 border border-white/15 bg-[#0a0a0a] cursor-pointer select-none"
+              style={{ opacity: 0 }}
+              onMouseEnter={(e) => handleNodeEnter(e, node.id)}
+              onMouseLeave={(e) => handleNodeLeave(e, node.id)}
+            >
+              <span className="font-mono text-[10px] md:text-xs uppercase tracking-[0.12em] text-white/80 whitespace-nowrap">
+                {node.label}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        <div className="md:hidden absolute left-1/2 top-[20%] bottom-[20%] w-px bg-gradient-to-b from-transparent via-red-600/30 to-transparent pointer-events-none" />
 
       </div>
     </section>

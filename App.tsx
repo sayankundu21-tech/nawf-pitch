@@ -5,6 +5,7 @@ import HorizontalVideoSection from './components/HorizontalVideoSection';
 import TextRevealSection from './components/TextRevealSection';
 import VennSection from './components/VennSection';
 import ArsenalSection from './components/ArsenalSection';
+import FloatingPillsSection from './components/FloatingPillsSection';
 
 const App: React.FC = () => {
   return (
@@ -26,6 +27,9 @@ const App: React.FC = () => {
 
       {/* Sixth Section: AI 360 Arsenal Network */}
       <ArsenalSection />
+
+      {/* Seventh Section: Floating Pills */}
+      <FloatingPillsSection />
 
       {/* Footer / Scroll hint */}
       <div className="fixed bottom-8 left-8 z-50 mix-blend-difference pointer-events-none">

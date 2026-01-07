@@ -1,256 +1,158 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useGSAP } from '@gsap/react';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const LINES = [
+  'ULTRA REALISTIC',
+  'PHOTOGRAPHY',
+  'CINEMATIC STORY-TELLING',
+  'INFLUENCERS / CELEBS / YOUTUBERS PARTNERSHIP',
+  'COST EFFECTIVE',
+  'NO REAL-TIME PRODUCTION SETUP',
+  'NO CREW',
+  'TIME-EFFICIENT + HIGH-VELOCITY DELIVERY',
+  'COMMERCIAL ADS',
+  'READY-TO-GO AD CAMPAIGNS',
+  'SYNCHRONOUS (THE OVERLAP)',
+  'VERSATILE',
+];
+
 const ArsenalSection: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const stackRef = useRef<HTMLDivElement>(null);
+  const linesRef = useRef<HTMLDivElement[]>([]);
 
-  useGSAP(() => {
+  useEffect(() => {
     const section = sectionRef.current;
-    if (!section) return;
+    const title = titleRef.current;
+    const stack = stackRef.current;
+    const lines = linesRef.current;
 
-    const heading = section.querySelector('.arsenal-heading');
-    const coreCard = section.querySelector('.arsenal-core');
-    const creativeRows = gsap.utils.toArray<HTMLElement>('.arsenal-creative-row');
-    const efficiencyBlock = section.querySelector('.arsenal-efficiency-block');
-    const efficiencyItems = gsap.utils.toArray<HTMLElement>('.arsenal-efficiency-item');
-    const resolutionBlock = section.querySelector('.arsenal-resolution');
+    if (!section || !title || !stack || lines.length === 0) return;
 
-    gsap.set(heading, { opacity: 0, y: 40 });
-    gsap.set(coreCard, { opacity: 0, y: 30, scale: 0.98 });
-    gsap.set(creativeRows, { opacity: 0, y: 24 });
-    gsap.set(efficiencyBlock, { opacity: 0, y: 24 });
-    gsap.set(efficiencyItems, { opacity: 0, y: 20 });
-    gsap.set(resolutionBlock, { opacity: 0, y: 24, scale: 0.97 });
+    const ctx = gsap.context(() => {
+      gsap.set(title, { opacity: 0, y: 30 });
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
+      gsap.to(title, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 80%',
+          toggleActions: 'play none none reverse',
+        },
+      });
+
+      const lineHeight = 80;
+      const totalHeight = lines.length * lineHeight;
+      const startOffset = totalHeight / 2;
+
+      gsap.set(stack, { y: startOffset });
+
+      ScrollTrigger.create({
         trigger: section,
         start: 'top top',
-        end: '+=5500',
-        pin: true,
-        scrub: 0.6,
-        anticipatePin: 1
-      }
-    });
+        end: 'bottom bottom',
+        scrub: 0.3,
+        onUpdate: (self) => {
+          const progress = self.progress;
+          const yMove = -totalHeight * progress;
+          gsap.set(stack, { y: startOffset + yMove });
 
-    tl.to(heading, {
-      opacity: 1,
-      y: 0,
-      duration: 0.4,
-      ease: 'power2.out'
-    }, 0);
+          const viewportCenter = window.innerHeight / 2;
+          const stackRect = stack.getBoundingClientRect();
+          const stackTop = stackRect.top;
 
-    tl.to(heading, {
-      opacity: 0.4,
-      y: -60,
-      scale: 0.85,
-      duration: 0.5,
-      ease: 'power2.inOut'
-    }, 0.5);
+          lines.forEach((line, index) => {
+            const lineCenter = stackTop + index * lineHeight + lineHeight / 2;
+            const distanceFromCenter = Math.abs(viewportCenter - lineCenter);
+            const maxDistance = lineHeight * 2;
+            const normalizedDistance = Math.min(distanceFromCenter / maxDistance, 1);
 
-    tl.to(coreCard, {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      duration: 0.5,
-      ease: 'power2.out'
-    }, 0.6);
+            const opacity = 1 - normalizedDistance * 0.75;
+            const scale = 1 + (1 - normalizedDistance) * 0.08;
 
-    tl.to(coreCard, {
-      y: -180,
-      scale: 0.9,
-      opacity: 0.6,
-      duration: 0.6,
-      ease: 'power2.inOut'
-    }, 1.2);
+            gsap.set(line, {
+              opacity: opacity,
+              scale: scale,
+            });
+          });
+        },
+      });
+    }, section);
 
-    creativeRows.forEach((row, i) => {
-      const startTime = 1.4 + i * 0.35;
-      tl.to(row, {
-        opacity: 1,
-        y: 0,
-        duration: 0.4,
-        ease: 'power2.out'
-      }, startTime);
-
-      if (i < creativeRows.length - 1) {
-        tl.to(row, {
-          opacity: 0.3,
-          y: -30,
-          duration: 0.3,
-          ease: 'power2.inOut'
-        }, startTime + 0.3);
-      }
-    });
-
-    const efficiencyStart = 1.4 + creativeRows.length * 0.35 + 0.2;
-
-    tl.to(creativeRows[creativeRows.length - 1], {
-      opacity: 0.3,
-      y: -30,
-      duration: 0.3,
-      ease: 'power2.inOut'
-    }, efficiencyStart - 0.1);
-
-    tl.to(efficiencyBlock, {
-      opacity: 1,
-      y: 0,
-      duration: 0.5,
-      ease: 'power2.out'
-    }, efficiencyStart);
-
-    efficiencyItems.forEach((item, i) => {
-      tl.to(item, {
-        opacity: 1,
-        y: 0,
-        duration: 0.35,
-        ease: 'power2.out'
-      }, efficiencyStart + 0.5 + i * 0.25);
-    });
-
-    const resolutionStart = efficiencyStart + 0.5 + efficiencyItems.length * 0.25 + 0.3;
-
-    tl.to([efficiencyBlock, ...efficiencyItems], {
-      opacity: 0.25,
-      y: -20,
-      duration: 0.4,
-      ease: 'power2.inOut'
-    }, resolutionStart - 0.2);
-
-    tl.to(resolutionBlock, {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      duration: 0.6,
-      ease: 'power2.out'
-    }, resolutionStart);
-
-    tl.to({}, { duration: 0.8 }, resolutionStart + 0.6);
-
-  }, { scope: containerRef });
+    return () => ctx.revert();
+  }, []);
 
   return (
     <section
       ref={sectionRef}
-      className="relative w-full min-h-screen bg-[#050505] overflow-hidden"
+      className="relative w-full bg-black"
+      style={{ height: '200vh' }}
     >
-      <div
-        ref={containerRef}
-        className="relative w-full h-screen flex flex-col items-center justify-center"
-      >
-        <div
-          className="absolute inset-0 pointer-events-none opacity-[0.06]"
+      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col items-center justify-center">
+        <h2
+          ref={titleRef}
+          className="absolute top-[12%] left-1/2 -translate-x-1/2 z-20 text-white/90 text-center px-6"
           style={{
-            backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.5) 1px, transparent 1px)',
-            backgroundSize: '40px 40px'
+            fontFamily: 'system-ui, -apple-system, sans-serif',
+            fontSize: 'clamp(1rem, 2.5vw, 1.5rem)',
+            fontWeight: 400,
+            letterSpacing: '0.2em',
+            textTransform: 'uppercase',
           }}
-        />
+        >
+          What will you get associating with NAWF?
+        </h2>
 
-        <div className="arsenal-heading absolute top-[42%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 px-6">
-          <h2 className="font-mono text-xl md:text-2xl lg:text-3xl uppercase tracking-[0.12em] text-white/90 text-center leading-relaxed">
-            WHAT WILL YOU GET ASSOCIATING WITH NAWF?
-          </h2>
+        <div
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none"
+        >
+          <div
+            className="w-2 h-2 rounded-full"
+            style={{
+              backgroundColor: '#3b82f6',
+              boxShadow: '0 0 12px 4px rgba(59, 130, 246, 0.4)',
+            }}
+          />
         </div>
 
-        <div className="arsenal-core absolute top-[50%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 px-6">
-          <div className="px-12 py-8 md:px-16 md:py-10 border border-red-600/30 bg-[#080808]">
-            <div className="absolute inset-0 bg-gradient-to-br from-red-600/5 to-transparent pointer-events-none" />
-            <span className="font-mono text-base md:text-lg lg:text-xl uppercase tracking-[0.2em] text-white/95 whitespace-nowrap">
-              <span className="text-red-500">AI</span> 360° Content Arsenal
-            </span>
-          </div>
-        </div>
-
-        <div className="arsenal-creative-row absolute top-[50%] left-[8%] md:left-[12%] -translate-y-1/2 z-10">
-          <div className="relative">
-            <div className="w-12 h-px bg-red-600/30 absolute -left-16 top-1/2 hidden md:block" />
-            <span className="font-mono text-lg md:text-xl lg:text-2xl uppercase tracking-[0.15em] text-white/85">
-              ULTRA REALISTIC
-            </span>
-          </div>
-        </div>
-
-        <div className="arsenal-creative-row absolute top-[50%] right-[8%] md:right-[12%] -translate-y-1/2 z-10 text-right">
-          <div className="relative">
-            <div className="w-12 h-px bg-red-600/30 absolute -right-16 top-1/2 hidden md:block" />
-            <span className="font-mono text-lg md:text-xl lg:text-2xl uppercase tracking-[0.15em] text-white/85">
-              PHOTOGRAPHY
-            </span>
-          </div>
-        </div>
-
-        <div className="arsenal-creative-row absolute top-[50%] left-[8%] md:left-[12%] -translate-y-1/2 z-10">
-          <div className="relative">
-            <div className="w-12 h-px bg-red-600/30 absolute -left-16 top-1/2 hidden md:block" />
-            <span className="font-mono text-lg md:text-xl lg:text-2xl uppercase tracking-[0.15em] text-white/85">
-              CINEMATIC STORY-TELLING
-            </span>
-          </div>
-        </div>
-
-        <div className="arsenal-creative-row absolute top-[50%] right-[8%] md:right-[12%] -translate-y-1/2 z-10 text-right">
-          <div className="relative">
-            <div className="w-12 h-px bg-red-600/30 absolute -right-16 top-1/2 hidden md:block" />
-            <span className="font-mono text-lg md:text-xl lg:text-2xl uppercase tracking-[0.15em] text-white/85">
-              INFLUENCERS / CELEBS / YOUTUBERS PARTNERSHIP
-            </span>
-          </div>
-        </div>
-
-        <div className="arsenal-efficiency-block absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-full max-w-2xl px-6">
-          <div className="border border-white/10 bg-[#080808]/80 px-10 py-8 md:px-14 md:py-10">
-            <h3 className="font-mono text-lg md:text-xl uppercase tracking-[0.15em] text-white/90 mb-6">
-              COST EFFECTIVE
-            </h3>
-            <div className="space-y-3 pl-4 border-l border-red-600/20">
-              <p className="font-mono text-sm md:text-base uppercase tracking-[0.1em] text-white/60">
-                No real-time Production setup
-              </p>
-              <p className="font-mono text-sm md:text-base uppercase tracking-[0.1em] text-white/60">
-                No Crew
-              </p>
+        <div
+          ref={stackRef}
+          className="relative z-10"
+          style={{
+            transform: 'rotate(-12deg)',
+            transformOrigin: 'center center',
+          }}
+        >
+          {LINES.map((text, index) => (
+            <div
+              key={index}
+              ref={(el) => {
+                if (el) linesRef.current[index] = el;
+              }}
+              className="whitespace-nowrap text-center"
+              style={{
+                fontFamily: 'system-ui, -apple-system, sans-serif',
+                fontSize: 'clamp(1.5rem, 4vw, 3.5rem)',
+                fontWeight: 500,
+                letterSpacing: '0.08em',
+                color: 'white',
+                opacity: 0.25,
+                height: '80px',
+                lineHeight: '80px',
+                textTransform: 'uppercase',
+              }}
+            >
+              {text}
             </div>
-          </div>
+          ))}
         </div>
-
-        <div className="arsenal-efficiency-item absolute top-[58%] left-[8%] md:left-[15%] z-10">
-          <span className="font-mono text-base md:text-lg lg:text-xl uppercase tracking-[0.12em] text-white/80">
-            TIME-EFFICIENT + HIGH-VELOCITY DELIVERY
-          </span>
-        </div>
-
-        <div className="arsenal-efficiency-item absolute top-[58%] right-[8%] md:right-[15%] z-10 text-right">
-          <span className="font-mono text-base md:text-lg lg:text-xl uppercase tracking-[0.12em] text-white/80">
-            COMMERCIAL ADS
-          </span>
-        </div>
-
-        <div className="arsenal-efficiency-item absolute top-[58%] left-1/2 -translate-x-1/2 z-10 text-center">
-          <span className="font-mono text-base md:text-lg lg:text-xl uppercase tracking-[0.12em] text-white/80">
-            READY TO GO AD CAMPAIGNS
-          </span>
-        </div>
-
-        <div className="arsenal-resolution absolute top-[50%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 text-center">
-          <div className="space-y-6">
-            <div className="px-10 py-5 border border-white/15 bg-[#080808]/90">
-              <span className="font-mono text-lg md:text-xl lg:text-2xl uppercase tracking-[0.15em] text-white/90">
-                SYNCHRONOUS (THE OVERLAP)
-              </span>
-            </div>
-            <div className="px-10 py-5 border border-white/15 bg-[#080808]/90">
-              <span className="font-mono text-lg md:text-xl lg:text-2xl uppercase tracking-[0.15em] text-white/90">
-                VERSATILE
-              </span>
-            </div>
-          </div>
-        </div>
-
       </div>
     </section>
   );

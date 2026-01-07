@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -68,16 +69,18 @@ const GALLERY_IMAGES = [
   "https://res.cloudinary.com/dn8arfwkl/image/upload/v1767762416/DHAIRYA_FARMLEY_02_aiawhf.jpg"
 ];
 
-// --- Sub-Component: Lightbox ---
+// --- Sub-Component: Lightbox (Portal-based) ---
 const Lightbox = ({ src, onClose }: { src: string | null, onClose: () => void }) => {
-  const [isActive, setIsActive] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (src) {
-      setIsActive(true);
       document.body.style.overflow = "hidden";
     } else {
-      setIsActive(false);
       document.body.style.overflow = "";
     }
     return () => {
@@ -85,30 +88,44 @@ const Lightbox = ({ src, onClose }: { src: string | null, onClose: () => void })
     };
   }, [src]);
 
-  if (!src && !isActive) return null;
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && src) {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleEscape);
+    return () => window.removeEventListener("keydown", handleEscape);
+  }, [src, onClose]);
 
-  return (
+  if (!mounted || !src) return null;
+
+  return createPortal(
     <div
-      className={`fixed inset-0 z-[10000] flex items-center justify-center bg-black transition-opacity duration-500 ${src ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+      className="fixed inset-0 z-[10000] flex items-center justify-center bg-black"
       onClick={onClose}
     >
-      <div className="relative w-full h-full flex items-center justify-center p-4">
-        {src && (
-            <img
-                src={src}
-                alt="Full Screen View"
-                className="max-w-[98vw] max-h-[98vh] object-contain select-none"
-            />
-        )}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2">
-             <span className="font-mono text-[10px] text-white/40 tracking-[0.2em] uppercase border border-white/10 px-3 py-1 rounded-full">Click anywhere to close</span>
-        </div>
+      <img
+        src={src}
+        alt="Full Screen View"
+        className="max-w-[98vw] max-h-[98vh] object-contain select-none"
+        onClick={(e) => e.stopPropagation()}
+      />
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2">
+        <span className="font-mono text-[10px] text-white/40 tracking-[0.2em] uppercase border border-white/10 px-3 py-1 rounded-full">
+          Press ESC or click outside to close
+        </span>
       </div>
-      
-      <button className="absolute top-6 right-6 text-white/40 hover:text-white transition-colors p-4 group">
-        <svg className="w-10 h-10 transform group-hover:rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M6 18L18 6M6 6l12 12"></path></svg>
+      <button
+        className="absolute top-6 right-6 text-white/40 hover:text-white transition-colors p-4 group"
+        onClick={onClose}
+      >
+        <svg className="w-10 h-10 transform group-hover:rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
       </button>
-    </div>
+    </div>,
+    document.body
   );
 };
 

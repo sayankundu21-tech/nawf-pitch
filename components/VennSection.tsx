@@ -401,8 +401,13 @@ const VennSection: React.FC = () => {
 
         <div
           ref={overlapLabelRef}
-          className="absolute z-30 flex flex-col items-center left-1/2 -translate-x-1/2"
-          style={{ top: 'calc(50% + 100px)', opacity: 0 }}
+          className="absolute z-30 flex flex-col items-center"
+          style={{
+            left: '50%',
+            top: 'calc(50% + 140px)',
+            transform: 'translateX(-50%)',
+            opacity: 0
+          }}
         >
           <div
             className="w-px h-6 mb-3"

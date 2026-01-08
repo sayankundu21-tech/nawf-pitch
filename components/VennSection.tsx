@@ -62,50 +62,50 @@ const VennSection: React.FC = () => {
 
     tl.fromTo(flowLinesRef.current,
       { opacity: 0 },
-      { opacity: 1, duration: 0.4, ease: 'power2.out' },
+      { opacity: 1, duration: 0.3, ease: 'power2.out' },
       0.5
     );
 
     if (dottedPathLeftRef.current) {
       const pathLength = dottedPathLeftRef.current.getTotalLength();
       gsap.set(dottedPathLeftRef.current, { strokeDasharray: pathLength, strokeDashoffset: pathLength });
-      tl.to(dottedPathLeftRef.current, { strokeDashoffset: 0, duration: 0.8, ease: 'power2.inOut' }, 0.5);
+      tl.to(dottedPathLeftRef.current, { strokeDashoffset: 0, duration: 0.5, ease: 'power2.out' }, 0.5);
     }
 
     if (dottedPathRightRef.current) {
       const pathLength = dottedPathRightRef.current.getTotalLength();
       gsap.set(dottedPathRightRef.current, { strokeDasharray: pathLength, strokeDashoffset: pathLength });
-      tl.to(dottedPathRightRef.current, { strokeDashoffset: 0, duration: 0.8, ease: 'power2.inOut' }, 0.5);
+      tl.to(dottedPathRightRef.current, { strokeDashoffset: 0, duration: 0.5, ease: 'power2.out' }, 0.5);
     }
+
+    tl.fromTo(overlapRef.current,
+      { opacity: 0, scale: 0.9 },
+      { opacity: 0.7, scale: 1, duration: 0.4, ease: 'power2.out' },
+      0.55
+    );
+
+    tl.fromTo(nawfRef.current,
+      { opacity: 0, scale: 0.9 },
+      { opacity: 1, scale: 1, duration: 0.4, ease: 'power2.out' },
+      0.6
+    );
 
     if (dottedPathCenterRef.current) {
       const pathLength = dottedPathCenterRef.current.getTotalLength();
       gsap.set(dottedPathCenterRef.current, { strokeDasharray: pathLength, strokeDashoffset: pathLength });
-      tl.to(dottedPathCenterRef.current, { strokeDashoffset: 0, duration: 0.6, ease: 'power2.inOut' }, 0.7);
+      tl.to(dottedPathCenterRef.current, { strokeDashoffset: 0, duration: 0.4, ease: 'power2.out' }, 0.7);
     }
 
-    tl.fromTo(overlapRef.current,
-      { opacity: 0, scale: 0.8 },
-      { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.5)' },
-      0.6
-    );
-
-    tl.fromTo(nawfRef.current,
-      { opacity: 0, scale: 0.8, y: 20 },
-      { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: 'back.out(1.5)' },
-      0.7
-    );
-
     tl.fromTo([realityLabelRef.current, aiLabelRef.current],
-      { opacity: 0, y: 15 },
-      { opacity: 1, y: 0, duration: 0.4, stagger: 0.1, ease: 'power2.out' },
-      0.8
+      { opacity: 0, y: 10 },
+      { opacity: 1, y: 0, duration: 0.3, stagger: 0.05, ease: 'power2.out' },
+      0.65
     );
 
     tl.fromTo(overlapLabelRef.current,
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' },
-      0.9
+      { opacity: 0, y: 15 },
+      { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' },
+      0.85
     );
 
   }, { scope: containerRef });
@@ -286,7 +286,7 @@ const VennSection: React.FC = () => {
 
           <path
             ref={dottedPathLeftRef}
-            d="M 120 180 C 200 120 280 240 400 180"
+            d="M 120 180 C 200 120 280 260 400 200"
             fill="none"
             stroke="#ffffff"
             strokeWidth="1.5"
@@ -295,7 +295,7 @@ const VennSection: React.FC = () => {
           />
           <path
             ref={dottedPathRightRef}
-            d="M 680 180 C 600 240 520 120 400 180"
+            d="M 680 180 C 600 260 520 120 400 200"
             fill="none"
             stroke="#ffffff"
             strokeWidth="1.5"
@@ -304,7 +304,7 @@ const VennSection: React.FC = () => {
           />
           <path
             ref={dottedPathCenterRef}
-            d="M 400 180 L 400 380"
+            d="M 400 200 L 400 340"
             fill="none"
             stroke="#ea580c"
             strokeWidth="2"
@@ -314,8 +314,7 @@ const VennSection: React.FC = () => {
 
           <circle cx="120" cy="180" r="6" fill="#dc2626" />
           <circle cx="680" cy="180" r="6" fill="#0891b2" />
-          <circle cx="400" cy="180" r="8" fill="#ea580c" className="animate-pulse" />
-          <circle cx="400" cy="380" r="5" fill="#ea580c" />
+          <circle cx="400" cy="200" r="8" fill="#ea580c" className="animate-pulse" />
         </svg>
 
         <div
@@ -372,8 +371,8 @@ const VennSection: React.FC = () => {
           style={{
             width: 'min(22vw, 160px)',
             height: 'min(38vw, 280px)',
-            background: 'radial-gradient(ellipse at center, rgba(234, 88, 12, 0.15) 0%, rgba(255, 255, 255, 0.08) 40%, transparent 70%)',
-            boxShadow: '0 0 80px rgba(234, 88, 12, 0.2)',
+            background: 'radial-gradient(ellipse at center, rgba(234, 88, 12, 0.25) 0%, rgba(234, 88, 12, 0.12) 30%, rgba(255, 255, 255, 0.06) 60%, transparent 85%)',
+            boxShadow: '0 0 100px rgba(234, 88, 12, 0.3), inset 0 0 60px rgba(234, 88, 12, 0.1)',
             opacity: 0
           }}
         />
@@ -402,9 +401,13 @@ const VennSection: React.FC = () => {
 
         <div
           ref={overlapLabelRef}
-          className="absolute z-30 text-center left-1/2 -translate-x-1/2"
-          style={{ top: 'calc(50% + 160px)', opacity: 0 }}
+          className="absolute z-30 flex flex-col items-center left-1/2 -translate-x-1/2"
+          style={{ top: 'calc(50% + 100px)', opacity: 0 }}
         >
+          <div
+            className="w-px h-6 mb-3"
+            style={{ background: 'linear-gradient(to bottom, #ea580c, rgba(234, 88, 12, 0.3))' }}
+          />
           <span
             className={`font-mono text-xs md:text-sm uppercase tracking-[0.5em] px-4 py-2 rounded-full border transition-all duration-300 ${
               hoveredElement === 'nawf'

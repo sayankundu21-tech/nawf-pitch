@@ -5,6 +5,7 @@ import HorizontalVideoSection from './components/HorizontalVideoSection';
 import TextRevealSection from './components/TextRevealSection';
 import VennSection from './components/VennSection';
 import OverlapSection from './components/OverlapSection';
+import WhatYouGetSection from './components/WhatYouGetSection';
 
 const App: React.FC = () => {
   return (
@@ -26,6 +27,9 @@ const App: React.FC = () => {
 
       {/* Sixth Section: The Overlap Label */}
       <OverlapSection />
+
+      {/* Seventh Section: What You Get */}
+      <WhatYouGetSection />
 
       {/* Footer / Scroll hint */}
       <div className="fixed bottom-8 left-8 z-50 mix-blend-difference pointer-events-none">

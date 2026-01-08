@@ -25,17 +25,17 @@ const TextBlock: React.FC<TextBlockProps> = ({ headline, subtext, alignment }) =
 
     gsap.fromTo(words,
       {
-        y: 40,
+        y: 60,
         opacity: 0,
-        letterSpacing: '0.08em'
+        filter: "blur(10px)"
       },
       {
         y: 0,
         opacity: 1,
-        letterSpacing: '-0.04em',
-        duration: 0.5,
+        filter: "blur(0px)",
+        duration: 0.8,
         stagger: 0.04,
-        ease: 'power2.out',
+        ease: 'power3.out',
         scrollTrigger: {
           trigger: headlineEl,
           start: 'top 80%',
@@ -45,12 +45,13 @@ const TextBlock: React.FC<TextBlockProps> = ({ headline, subtext, alignment }) =
     );
 
     gsap.fromTo(subtextEl,
-      { y: 24, opacity: 0 },
+      { y: 30, opacity: 0, filter: "blur(5px)" },
       {
         y: 0,
         opacity: 1,
-        duration: 0.6,
-        delay: 0.2,
+        filter: "blur(0px)",
+        duration: 0.8,
+        delay: 0.3,
         ease: 'power2.out',
         scrollTrigger: {
           trigger: subtextEl,
@@ -66,7 +67,7 @@ const TextBlock: React.FC<TextBlockProps> = ({ headline, subtext, alignment }) =
       <span
         key={i}
         className="word-reveal inline-block will-change-transform"
-        style={{ marginRight: '0.3em' }}
+        style={{ marginRight: '0.25em' }}
       >
         {word}
       </span>
@@ -78,19 +79,19 @@ const TextBlock: React.FC<TextBlockProps> = ({ headline, subtext, alignment }) =
   return (
     <div
       ref={blockRef}
-      className={`flex flex-col gap-8 md:gap-10 ${isLeft ? '' : 'md:items-end'}`}
+      className={`flex flex-col gap-8 md:gap-12 ${isLeft ? '' : 'md:items-end'}`}
     >
       <h2
         ref={headlineRef}
-        className={`font-space-mono font-normal text-2xl sm:text-3xl md:text-4xl lg:text-5xl uppercase leading-[1.1] text-white max-w-5xl ${isLeft ? 'text-left' : 'md:text-right'}`}
-        style={{ letterSpacing: '-0.04em' }}
+        className={`font-sans font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-7xl uppercase leading-[0.95] tracking-tighter text-white max-w-6xl ${isLeft ? 'text-left' : 'md:text-right'}`}
+        style={{ fontFamily: "'Inter', sans-serif" }}
       >
         {wrapWords(headline)}
       </h2>
 
       <p
         ref={subtextRef}
-        className={`text-lg md:text-xl lg:text-2xl text-neutral-500 leading-relaxed max-w-md ${isLeft ? 'self-end md:mr-16' : 'self-start md:ml-16'}`}
+        className={`text-xl md:text-2xl lg:text-3xl text-neutral-400 leading-relaxed max-w-xl ${isLeft ? 'self-end md:mr-12' : 'self-start md:ml-12'}`}
         style={{ fontFamily: "'Playfair Display', serif", fontStyle: 'italic' }}
       >
         {subtext}
@@ -105,9 +106,9 @@ const TextRevealSection: React.FC = () => {
   return (
     <section
       ref={containerRef}
-      className="relative w-full min-h-screen bg-[#050505] flex flex-col justify-center py-32 md:py-40 lg:py-48 px-6 sm:px-8 md:px-16 lg:px-24"
+      className="relative w-full min-h-screen bg-[#050505] flex flex-col justify-center py-32 md:py-40 lg:py-56 px-6 sm:px-8 md:px-16 lg:px-24"
     >
-      <div className="flex flex-col gap-32 md:gap-48 lg:gap-56 max-w-6xl mx-auto w-full">
+      <div className="flex flex-col gap-40 md:gap-64 max-w-[1400px] mx-auto w-full">
 
         <TextBlock
           headline="IF YOU'RE ASKING WHAT'S SPECIAL ABOUT THESE, THE ANSWER IS YES AND NO."

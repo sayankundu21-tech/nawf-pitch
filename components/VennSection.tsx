@@ -127,11 +127,6 @@ const VennSection: React.FC = () => {
       ease: 'power2.out'
     });
 
-    gsap.to(overlapLabelRef.current, {
-      scale: 1.1,
-      duration: 0.3,
-      ease: 'power2.out'
-    });
 
     const letters = nawfRef.current?.querySelectorAll('.nawf-letter');
     if (letters) {
@@ -170,11 +165,6 @@ const VennSection: React.FC = () => {
       ease: 'power2.out'
     });
 
-    gsap.to(overlapLabelRef.current, {
-      scale: 1,
-      duration: 0.3,
-      ease: 'power2.out'
-    });
 
     const letters = nawfRef.current?.querySelectorAll('.nawf-letter');
     if (letters) {
@@ -401,7 +391,7 @@ const VennSection: React.FC = () => {
 
         <div
           ref={overlapLabelRef}
-          className="absolute z-30 flex flex-col items-center"
+          className="absolute z-30"
           style={{
             left: '50%',
             top: 'calc(50% + 140px)',
@@ -409,17 +399,7 @@ const VennSection: React.FC = () => {
             opacity: 0
           }}
         >
-          <div
-            className="w-px h-6 mb-3"
-            style={{ background: 'linear-gradient(to bottom, #ea580c, rgba(234, 88, 12, 0.3))' }}
-          />
-          <span
-            className={`font-mono text-xs md:text-sm uppercase tracking-[0.5em] px-4 py-2 rounded-full border transition-all duration-300 ${
-              hoveredElement === 'nawf'
-                ? 'text-orange-400 border-orange-500/50 bg-orange-500/10'
-                : 'text-white/60 border-white/20 bg-white/5'
-            }`}
-          >
+          <span className="font-mono text-xs md:text-sm uppercase tracking-[0.5em] text-white/60">
             The Overlap
           </span>
         </div>

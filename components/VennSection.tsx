@@ -12,7 +12,6 @@ const VennSection: React.FC = () => {
   const realityCircleRef = useRef<HTMLDivElement>(null);
   const aiCircleRef = useRef<HTMLDivElement>(null);
   const nawfRef = useRef<HTMLDivElement>(null);
-  const overlapRef = useRef<HTMLDivElement>(null);
   const flowLinesRef = useRef<SVGSVGElement>(null);
   const realityLabelRef = useRef<HTMLSpanElement>(null);
   const aiLabelRef = useRef<HTMLSpanElement>(null);
@@ -78,12 +77,6 @@ const VennSection: React.FC = () => {
       tl.to(dottedPathRightRef.current, { strokeDashoffset: 0, duration: 0.5, ease: 'power2.out' }, 0.5);
     }
 
-    tl.fromTo(overlapRef.current,
-      { opacity: 0, scale: 0.9 },
-      { opacity: 0.7, scale: 1, duration: 0.4, ease: 'power2.out' },
-      0.55
-    );
-
     tl.fromTo(nawfRef.current,
       { opacity: 0, scale: 0.9 },
       { opacity: 1, scale: 1, duration: 0.4, ease: 'power2.out' },
@@ -113,13 +106,6 @@ const VennSection: React.FC = () => {
   const handleNawfEnter = useCallback(() => {
     setHoveredElement('nawf');
 
-    gsap.to(overlapRef.current, {
-      opacity: 1,
-      scale: 1.1,
-      duration: 0.3,
-      ease: 'power2.out'
-    });
-
     gsap.to([dottedPathLeftRef.current, dottedPathRightRef.current, dottedPathCenterRef.current], {
       stroke: '#ffffff',
       strokeWidth: 2.5,
@@ -143,13 +129,6 @@ const VennSection: React.FC = () => {
 
   const handleNawfLeave = useCallback(() => {
     setHoveredElement(null);
-
-    gsap.to(overlapRef.current, {
-      opacity: 0.7,
-      scale: 1,
-      duration: 0.3,
-      ease: 'power2.out'
-    });
 
     gsap.to([dottedPathLeftRef.current, dottedPathRightRef.current], {
       stroke: '#ffffff',
@@ -354,18 +333,6 @@ const VennSection: React.FC = () => {
             AI
           </span>
         </div>
-
-        <div
-          ref={overlapRef}
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-none"
-          style={{
-            width: 'min(22vw, 160px)',
-            height: 'min(38vw, 280px)',
-            background: 'radial-gradient(ellipse at center, rgba(234, 88, 12, 0.25) 0%, rgba(234, 88, 12, 0.12) 30%, rgba(255, 255, 255, 0.06) 60%, transparent 85%)',
-            boxShadow: '0 0 100px rgba(234, 88, 12, 0.3), inset 0 0 60px rgba(234, 88, 12, 0.1)',
-            opacity: 0
-          }}
-        />
 
         <div
           ref={nawfRef}

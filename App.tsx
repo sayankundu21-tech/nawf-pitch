@@ -4,6 +4,7 @@ import VerticalSection from './components/VerticalSection';
 import HorizontalVideoSection from './components/HorizontalVideoSection';
 import TextRevealSection from './components/TextRevealSection';
 import VennSection from './components/VennSection';
+import OverlapSection from './components/OverlapSection';
 
 const App: React.FC = () => {
   return (
@@ -22,6 +23,9 @@ const App: React.FC = () => {
 
       {/* Fifth Section: NAWF Venn Diagram */}
       <VennSection />
+
+      {/* Sixth Section: The Overlap Label */}
+      <OverlapSection />
 
       {/* Footer / Scroll hint */}
       <div className="fixed bottom-8 left-8 z-50 mix-blend-difference pointer-events-none">

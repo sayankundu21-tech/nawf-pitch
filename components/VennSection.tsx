@@ -15,10 +15,8 @@ const VennSection: React.FC = () => {
   const flowLinesRef = useRef<SVGSVGElement>(null);
   const realityLabelRef = useRef<HTMLSpanElement>(null);
   const aiLabelRef = useRef<HTMLSpanElement>(null);
-  const overlapLabelRef = useRef<HTMLDivElement>(null);
   const dottedPathLeftRef = useRef<SVGPathElement>(null);
   const dottedPathRightRef = useRef<SVGPathElement>(null);
-  const dottedPathCenterRef = useRef<SVGPathElement>(null);
 
   const [hoveredElement, setHoveredElement] = useState<'nawf' | 'reality' | 'ai' | null>(null);
 
@@ -83,22 +81,10 @@ const VennSection: React.FC = () => {
       0.6
     );
 
-    if (dottedPathCenterRef.current) {
-      const pathLength = dottedPathCenterRef.current.getTotalLength();
-      gsap.set(dottedPathCenterRef.current, { strokeDasharray: pathLength, strokeDashoffset: pathLength });
-      tl.to(dottedPathCenterRef.current, { strokeDashoffset: 0, duration: 0.4, ease: 'power2.out' }, 0.7);
-    }
-
     tl.fromTo([realityLabelRef.current, aiLabelRef.current],
       { opacity: 0, y: 10 },
       { opacity: 1, y: 0, duration: 0.3, stagger: 0.05, ease: 'power2.out' },
       0.65
-    );
-
-    tl.fromTo(overlapLabelRef.current,
-      { opacity: 0, y: 15 },
-      { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' },
-      0.85
     );
 
   }, { scope: containerRef });
@@ -106,13 +92,12 @@ const VennSection: React.FC = () => {
   const handleNawfEnter = useCallback(() => {
     setHoveredElement('nawf');
 
-    gsap.to([dottedPathLeftRef.current, dottedPathRightRef.current, dottedPathCenterRef.current], {
+    gsap.to([dottedPathLeftRef.current, dottedPathRightRef.current], {
       stroke: '#ffffff',
       strokeWidth: 2.5,
       duration: 0.3,
       ease: 'power2.out'
     });
-
 
     const letters = nawfRef.current?.querySelectorAll('.nawf-letter');
     if (letters) {
@@ -136,14 +121,6 @@ const VennSection: React.FC = () => {
       duration: 0.3,
       ease: 'power2.out'
     });
-
-    gsap.to(dottedPathCenterRef.current, {
-      stroke: '#ea580c',
-      strokeWidth: 2,
-      duration: 0.3,
-      ease: 'power2.out'
-    });
-
 
     const letters = nawfRef.current?.querySelectorAll('.nawf-letter');
     if (letters) {
@@ -202,7 +179,7 @@ const VennSection: React.FC = () => {
   return (
     <section
       ref={containerRef}
-      className="relative w-full min-h-screen bg-[#050505] overflow-hidden flex flex-col items-center justify-center py-24 md:py-32"
+      className="relative w-full min-h-screen bg-[#050505] overflow-hidden flex flex-col items-center justify-center pt-24 md:pt-32 pb-0"
     >
       <div
         className="absolute inset-0 pointer-events-none opacity-10"
@@ -270,15 +247,6 @@ const VennSection: React.FC = () => {
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeDasharray="8 8"
-          />
-          <path
-            ref={dottedPathCenterRef}
-            d="M 400 200 L 400 340"
-            fill="none"
-            stroke="#ea580c"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeDasharray="6 6"
           />
 
           <circle cx="120" cy="180" r="6" fill="#dc2626" />
@@ -356,22 +324,7 @@ const VennSection: React.FC = () => {
           </span>
         </div>
 
-        <div
-          ref={overlapLabelRef}
-          className="absolute z-30"
-          style={{
-            left: '50%',
-            top: 'calc(50% + 140px)',
-            transform: 'translateX(-50%)',
-            opacity: 0
-          }}
-        >
-          <span className="font-mono text-xs md:text-sm uppercase tracking-[0.5em] text-white/60">
-            The Overlap
-          </span>
-        </div>
       </div>
-
     </section>
   );
 };

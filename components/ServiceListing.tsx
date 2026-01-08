@@ -5,264 +5,192 @@ import { useGSAP } from '@gsap/react';
 
 gsap.registerPlugin(ScrollTrigger);
 
-interface ServiceRowProps {
-  text: string;
-  index: number;
-  category?: string;
-}
+const DATA_ITEMS = [
+  "ULTRA REALISTIC",
+  "PHOTOGRAPHY",
+  "CINEMATIC STORY-TELLING",
+  "INFLUENCERS / CELEBS / YOUTUBERS PARTNERSHIP",
+  "SYNCHRONOUS (THE OVERLAP)",
+  "VERSATILE",
+  "COST EFFECTIVE",
+  "NO REAL-TIME PRODUCTION SETUP",
+  "NO CREW",
+  "TIME-EFFICIENT + HIGH-VELOCITY DELIVERY",
+  "COMMERCIAL ADS",
+  "READY TO GO AD CAMPAIGNS"
+];
 
-const ServiceRow: React.FC<ServiceRowProps> = ({ text, index }) => {
+const ServiceRow = ({ text, index }: { text: string; index: number }) => {
   const rowRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLSpanElement>(null);
+  const lineRef = useRef<SVGPathElement>(null);
   const indexRef = useRef<HTMLSpanElement>(null);
-  const lineRef = useRef<HTMLDivElement>(null);
 
   const handleMouseEnter = useCallback(() => {
     if (!rowRef.current) return;
+    
+    // Slight shift right for text
+    gsap.to(textRef.current, { x: 20, color: "#ffffff", duration: 0.5, ease: 'power3.out' });
+    
+    // Index highlights
+    gsap.to(indexRef.current, { color: "#ea580c", opacity: 1, duration: 0.3 });
 
-    gsap.to(rowRef.current, {
-      backgroundColor: 'rgba(255, 255, 255, 0.03)',
-      duration: 0.3,
-      ease: 'power2.out'
-    });
-
-    gsap.to(indexRef.current, {
-      opacity: 1,
-      x: 0,
-      duration: 0.25,
-      ease: 'power2.out'
-    });
-
-    gsap.to(lineRef.current, {
-      scaleX: 1,
-      opacity: 1,
-      duration: 0.4,
-      ease: 'power3.out'
-    });
+    // Wavy line reveal animation
+    if (lineRef.current) {
+        gsap.fromTo(lineRef.current, 
+            { strokeDashoffset: 50, opacity: 0 },
+            { strokeDashoffset: 0, opacity: 1, duration: 0.5, ease: 'power2.out' }
+        );
+    }
+    
+    // Background subtle glow
+    gsap.to(rowRef.current, { backgroundColor: 'rgba(255,255,255,0.02)', duration: 0.4 });
   }, []);
 
   const handleMouseLeave = useCallback(() => {
     if (!rowRef.current) return;
 
-    gsap.to(rowRef.current, {
-      backgroundColor: 'transparent',
-      duration: 0.3,
-      ease: 'power2.out'
-    });
-
-    gsap.to(indexRef.current, {
-      opacity: 0,
-      x: -8,
-      duration: 0.25,
-      ease: 'power2.out'
-    });
-
-    gsap.to(lineRef.current, {
-      scaleX: 0,
-      opacity: 0,
-      duration: 0.3,
-      ease: 'power2.out'
-    });
+    gsap.to(textRef.current, { x: 0, color: "#737373", duration: 0.5, ease: 'power3.out' });
+    gsap.to(indexRef.current, { color: "rgba(255,255,255,0.2)", opacity: 0.4, duration: 0.3 });
+    
+    if (lineRef.current) {
+        gsap.to(lineRef.current, { opacity: 0, duration: 0.3 });
+    }
+    
+    gsap.to(rowRef.current, { backgroundColor: 'transparent', duration: 0.4 });
   }, []);
-
-  const formattedIndex = String(index + 1).padStart(2, '0');
 
   return (
     <div
       ref={rowRef}
-      className="service-row relative w-full border-b border-white/10 cursor-pointer transition-colors"
+      className="group relative w-full border-b border-white/10 cursor-default overflow-hidden"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      style={{ opacity: 0, transform: 'translateY(30px)' }}
     >
-      <div className="relative flex items-center justify-between py-6 md:py-8 lg:py-10 px-4 md:px-8 lg:px-12">
-        <div className="flex items-center gap-4 md:gap-6">
-          <span
+      <div className="flex items-center justify-between py-8 md:py-10 px-2 md:px-0">
+        <div className="flex items-baseline gap-6 md:gap-12 w-full">
+          <span 
             ref={indexRef}
-            className="font-mono text-xs text-white/40"
-            style={{ opacity: 0, transform: 'translateX(-8px)' }}
+            className="font-mono text-xs md:text-sm text-white/20 w-6 md:w-8 transition-colors duration-300"
           >
-            {formattedIndex}
+            {String(index + 1).padStart(2, '0')}
           </span>
-          <span className="text-lg md:text-xl lg:text-2xl font-light tracking-wide text-white/90">
+          <span 
+            ref={textRef}
+            className="font-sans text-xl md:text-3xl lg:text-4xl font-semibold text-neutral-500 tracking-tight will-change-transform uppercase"
+            style={{ fontFamily: "'Inter', sans-serif" }}
+          >
             {text}
           </span>
         </div>
-        <div
-          ref={lineRef}
-          className="hidden md:block w-16 lg:w-24 h-px bg-white/30"
-          style={{ transformOrigin: 'left center', transform: 'scaleX(0)', opacity: 0 }}
-        />
+        
+        <div className="shrink-0 ml-4 hidden md:block">
+          <svg width="40" height="12" viewBox="0 0 40 12" fill="none">
+            <path 
+              ref={lineRef}
+              d="M0 6 Q 10 0, 20 6 T 40 6" 
+              stroke="#ea580c" 
+              strokeWidth="1.5"
+              fill="none"
+              strokeDasharray="50"
+              strokeDashoffset="50"
+              className="opacity-0"
+              style={{ strokeLinecap: 'round', strokeLinejoin: 'round' }}
+            />
+          </svg>
+        </div>
       </div>
-    </div>
-  );
-};
-
-interface CategoryLabelProps {
-  text: string;
-}
-
-const CategoryLabel: React.FC<CategoryLabelProps> = ({ text }) => {
-  return (
-    <div
-      className="category-label w-full pt-12 md:pt-16 lg:pt-20 pb-4 md:pb-6 px-4 md:px-8 lg:px-12"
-      style={{ opacity: 0, transform: 'translateY(20px)' }}
-    >
-      <span className="font-mono text-[10px] md:text-xs uppercase tracking-[0.3em] text-white/30">
-        {text}
-      </span>
     </div>
   );
 };
 
 const ServiceListing: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const headingRef = useRef<HTMLHeadingElement>(null);
-  const anchorRef = useRef<HTMLDivElement>(null);
-
-  const services = {
-    primary: [
-      'ULTRA REALISTIC',
-      'PHOTOGRAPHY',
-      'CINEMATIC STORY-TELLING',
-      'INFLUENCERS / CELEBS / YOUTUBERS PARTNERSHIP'
-    ],
-    core: [
-      'SYNCHRONOUS (THE OVERLAP)',
-      'VERSATILE'
-    ],
-    delivery: [
-      'COST EFFECTIVE',
-      'No real-time Production setup',
-      'No Crew',
-      'TIME-EFFICIENT + HIGH-VELOCITY DELIVERY',
-      'COMMERCIAL ADS',
-      'READY TO GO AD CAMPAIGNS'
-    ]
-  };
 
   useGSAP(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    gsap.fromTo(
-      headingRef.current,
-      { opacity: 0, y: 60 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 1,
+    // 1. Heading Reveal
+    gsap.fromTo('.service-header', 
+      { y: 60, opacity: 0 },
+      { 
+        y: 0, 
+        opacity: 1, 
+        duration: 1, 
         ease: 'power3.out',
-        scrollTrigger: {
-          trigger: container,
-          start: 'top 80%',
-          toggleActions: 'play none none none'
+        scrollTrigger: { 
+          trigger: container, 
+          start: 'top 75%',
+          toggleActions: 'play none none reverse'
+        } 
+      }
+    );
+
+    // 2. Anchor Reveal
+    gsap.fromTo('.service-anchor',
+      { y: 60, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 1.1,
+        ease: 'power3.out',
+        delay: 0.1,
+        scrollTrigger: { 
+          trigger: container, 
+          start: 'top 75%',
+          toggleActions: 'play none none reverse'
         }
       }
     );
 
-    gsap.fromTo(
-      anchorRef.current,
-      { opacity: 0, y: 40, scale: 0.98 },
+    // 3. List Stagger
+    gsap.fromTo(container.querySelectorAll('.service-row-wrapper'),
+      { y: 60, opacity: 0 },
       {
-        opacity: 1,
         y: 0,
-        scale: 1,
-        duration: 0.9,
+        opacity: 1,
+        duration: 0.8,
+        stagger: 0.06,
         ease: 'power3.out',
-        scrollTrigger: {
-          trigger: anchorRef.current,
+        scrollTrigger: { 
+          trigger: '.service-list', 
           start: 'top 85%',
-          toggleActions: 'play none none none'
+          toggleActions: 'play none none reverse'
         }
       }
     );
-
-    const categoryLabels = container.querySelectorAll('.category-label');
-    categoryLabels.forEach((label) => {
-      gsap.to(label, {
-        opacity: 1,
-        y: 0,
-        duration: 0.6,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: label,
-          start: 'top 90%',
-          toggleActions: 'play none none none'
-        }
-      });
-    });
-
-    const serviceRows = container.querySelectorAll('.service-row');
-    serviceRows.forEach((row, i) => {
-      gsap.to(row, {
-        opacity: 1,
-        y: 0,
-        duration: 0.5,
-        delay: i * 0.05,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: row,
-          start: 'top 92%',
-          toggleActions: 'play none none none'
-        }
-      });
-    });
-
   }, { scope: containerRef });
 
-  let globalIndex = 0;
-
   return (
-    <section
-      ref={containerRef}
-      className="relative w-full bg-[#050505] overflow-hidden"
-    >
-      <div className="relative z-10 max-w-6xl mx-auto px-4 md:px-8 lg:px-12 py-24 md:py-32 lg:py-40">
-        <h2
-          ref={headingRef}
-          className="text-2xl md:text-3xl lg:text-4xl font-light tracking-tight text-white/90 leading-tight mb-20 md:mb-28 lg:mb-36 max-w-3xl"
-          style={{ fontFamily: 'Inter, sans-serif' }}
-        >
-          WHAT WILL YOU GET ASSOCIATING WITH NAWF?
-        </h2>
+    <section ref={containerRef} className="w-full min-h-screen bg-[#050505] py-24 md:py-40 px-6 md:px-16 lg:px-24">
+       <div className="max-w-[1400px] mx-auto">
+         
+         {/* SECTION INTRO */}
+         <div className="mb-20 md:mb-28">
+           <h2 className="service-header font-sans font-black text-3xl md:text-5xl lg:text-7xl text-white leading-[0.95] tracking-tighter max-w-5xl uppercase" style={{ fontFamily: "'Inter', sans-serif" }}>
+             What will you get associating with NAWF?
+           </h2>
+         </div>
 
-        <div
-          ref={anchorRef}
-          className="relative mb-16 md:mb-20 lg:mb-24 pb-12 md:pb-16 border-b border-white/10"
-        >
-          <div className="flex flex-col">
-            <span
-              className="text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-extralight text-white/95 tracking-tight"
-              style={{ fontFamily: 'Inter, sans-serif' }}
-            >
-              <span className="font-medium">AI</span> 360° Content Arsenal
-            </span>
-          </div>
-        </div>
+         {/* CENTRAL ANCHOR */}
+         <div className="service-anchor mb-20 md:mb-28 pl-4 md:pl-12 border-l border-white/10">
+            <h3 className="text-4xl md:text-6xl lg:text-8xl text-white leading-none tracking-tighter">
+              <span className="font-sans font-black block md:inline mr-6" style={{ fontFamily: "'Inter', sans-serif" }}>AI</span>
+              <span className="font-serif italic font-light text-white/50">360° Content Arsenal</span>
+            </h3>
+         </div>
 
-        <div className="w-full">
-          <CategoryLabel text="Primary capabilities" />
-          <div className="border-t border-white/10">
-            {services.primary.map((service) => (
-              <ServiceRow key={service} text={service} index={globalIndex++} />
+         {/* SERVICE LIST (Continuous) */}
+         <div className="service-list border-t border-white/10">
+            {DATA_ITEMS.map((item, i) => (
+              <div key={i} className="service-row-wrapper">
+                <ServiceRow text={item} index={i} />
+              </div>
             ))}
-          </div>
+         </div>
 
-          <CategoryLabel text="Core differentiation" />
-          <div className="border-t border-white/10">
-            {services.core.map((service) => (
-              <ServiceRow key={service} text={service} index={globalIndex++} />
-            ))}
-          </div>
-
-          <CategoryLabel text="Delivery & scale" />
-          <div className="border-t border-white/10">
-            {services.delivery.map((service) => (
-              <ServiceRow key={service} text={service} index={globalIndex++} />
-            ))}
-          </div>
-        </div>
-      </div>
+       </div>
     </section>
   );
 };

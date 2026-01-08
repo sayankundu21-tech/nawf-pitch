@@ -19,34 +19,29 @@ const OverlapSection: React.FC = () => {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: container,
-        start: 'top 80%',
-        end: 'center center',
-        scrub: 0.5,
+        start: 'top 90%',
+        toggleActions: 'play none none none',
       }
     });
 
-    tl.fromTo(lineLeftRef.current,
-      { scaleX: 0, opacity: 0 },
-      { scaleX: 1, opacity: 1, duration: 0.5, ease: 'power2.out' },
+    tl.to(lineLeftRef.current,
+      { scaleX: 1, opacity: 1, duration: 0.6, ease: 'power2.out' },
       0
     );
 
-    tl.fromTo(lineRightRef.current,
-      { scaleX: 0, opacity: 0 },
-      { scaleX: 1, opacity: 1, duration: 0.5, ease: 'power2.out' },
+    tl.to(lineRightRef.current,
+      { scaleX: 1, opacity: 1, duration: 0.6, ease: 'power2.out' },
       0
     );
 
-    tl.fromTo(labelRef.current,
-      { opacity: 0, y: 20, scale: 0.9 },
-      { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: 'power3.out' },
+    tl.to(labelRef.current,
+      { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: 'power3.out' },
+      0.1
+    );
+
+    tl.to(glowRef.current,
+      { opacity: 0.6, scale: 1, duration: 0.6, ease: 'power2.out' },
       0.2
-    );
-
-    tl.fromTo(glowRef.current,
-      { opacity: 0, scale: 0.8 },
-      { opacity: 1, scale: 1, duration: 0.5, ease: 'power2.out' },
-      0.3
     );
 
   }, { scope: containerRef });
@@ -115,6 +110,7 @@ const OverlapSection: React.FC = () => {
           style={{
             background: 'linear-gradient(90deg, transparent 0%, rgba(234, 88, 12, 0.6) 100%)',
             transformOrigin: 'right center',
+            transform: 'scaleX(0)',
             opacity: 0
           }}
         />
@@ -137,7 +133,7 @@ const OverlapSection: React.FC = () => {
           <div
             ref={labelRef}
             className="relative"
-            style={{ opacity: 0 }}
+            style={{ opacity: 0, transform: 'translateY(20px) scale(0.9)' }}
           >
             <span
               className="font-mono text-sm md:text-base uppercase text-white/80 font-medium"
@@ -154,6 +150,7 @@ const OverlapSection: React.FC = () => {
           style={{
             background: 'linear-gradient(90deg, rgba(234, 88, 12, 0.6) 0%, transparent 100%)',
             transformOrigin: 'left center',
+            transform: 'scaleX(0)',
             opacity: 0
           }}
         />

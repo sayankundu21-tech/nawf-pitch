@@ -264,12 +264,12 @@ const VennSection: React.FC = () => {
         </div>
       </div>
 
-      <div className="relative w-full max-w-5xl mx-auto px-4 flex items-center justify-center" style={{ height: '55vh', minHeight: '450px' }}>
+      <div className="relative w-full max-w-5xl mx-auto px-4 flex items-center justify-center" style={{ height: '60vh', minHeight: '500px' }}>
 
         <svg
           ref={flowLinesRef}
           className="absolute inset-0 w-full h-full pointer-events-none z-10"
-          viewBox="0 0 800 400"
+          viewBox="0 0 800 450"
           preserveAspectRatio="xMidYMid meet"
           style={{ opacity: 0 }}
         >
@@ -286,7 +286,7 @@ const VennSection: React.FC = () => {
 
           <path
             ref={dottedPathLeftRef}
-            d="M 120 200 C 200 140 280 260 400 200"
+            d="M 120 180 C 200 120 280 240 400 180"
             fill="none"
             stroke="#ffffff"
             strokeWidth="1.5"
@@ -295,7 +295,7 @@ const VennSection: React.FC = () => {
           />
           <path
             ref={dottedPathRightRef}
-            d="M 680 200 C 600 260 520 140 400 200"
+            d="M 680 180 C 600 240 520 120 400 180"
             fill="none"
             stroke="#ffffff"
             strokeWidth="1.5"
@@ -304,7 +304,7 @@ const VennSection: React.FC = () => {
           />
           <path
             ref={dottedPathCenterRef}
-            d="M 400 200 L 400 320"
+            d="M 400 180 L 400 380"
             fill="none"
             stroke="#ea580c"
             strokeWidth="2"
@@ -312,10 +312,10 @@ const VennSection: React.FC = () => {
             strokeDasharray="6 6"
           />
 
-          <circle cx="120" cy="200" r="6" fill="#dc2626" />
-          <circle cx="680" cy="200" r="6" fill="#0891b2" />
-          <circle cx="400" cy="200" r="8" fill="#ea580c" className="animate-pulse" />
-          <circle cx="400" cy="320" r="5" fill="#ea580c" />
+          <circle cx="120" cy="180" r="6" fill="#dc2626" />
+          <circle cx="680" cy="180" r="6" fill="#0891b2" />
+          <circle cx="400" cy="180" r="8" fill="#ea580c" className="animate-pulse" />
+          <circle cx="400" cy="380" r="5" fill="#ea580c" />
         </svg>
 
         <div
@@ -402,21 +402,18 @@ const VennSection: React.FC = () => {
 
         <div
           ref={overlapLabelRef}
-          className="absolute z-30 text-center"
-          style={{ bottom: '5%', left: '50%', transform: 'translateX(-50%)', opacity: 0 }}
+          className="absolute z-30 text-center left-1/2 -translate-x-1/2"
+          style={{ top: 'calc(50% + 160px)', opacity: 0 }}
         >
-          <div className="flex flex-col items-center gap-2">
-            <div className="w-px h-8 bg-gradient-to-b from-orange-500 to-transparent" />
-            <span
-              className={`font-mono text-xs md:text-sm uppercase tracking-[0.5em] px-4 py-2 rounded-full border transition-all duration-300 ${
-                hoveredElement === 'nawf'
-                  ? 'text-orange-400 border-orange-500/50 bg-orange-500/10'
-                  : 'text-white/60 border-white/20 bg-white/5'
-              }`}
-            >
-              The Overlap
-            </span>
-          </div>
+          <span
+            className={`font-mono text-xs md:text-sm uppercase tracking-[0.5em] px-4 py-2 rounded-full border transition-all duration-300 ${
+              hoveredElement === 'nawf'
+                ? 'text-orange-400 border-orange-500/50 bg-orange-500/10'
+                : 'text-white/60 border-white/20 bg-white/5'
+            }`}
+          >
+            The Overlap
+          </span>
         </div>
       </div>
 

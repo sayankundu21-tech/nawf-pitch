@@ -6,6 +6,7 @@ import TextRevealSection from './components/TextRevealSection';
 import VennSection from './components/VennSection';
 import OverlapSection from './components/OverlapSection';
 import ServiceListing from './components/ServiceListing';
+import AutomationSection from './components/AutomationSection';
 
 const App: React.FC = () => {
   return (
@@ -30,6 +31,9 @@ const App: React.FC = () => {
 
       {/* Seventh Section: Service Listing */}
       <ServiceListing />
+
+      {/* Eighth Section: Automation Dashboard */}
+      <AutomationSection />
 
       {/* Footer / Scroll hint */}
       <div className="fixed bottom-8 left-8 z-50 mix-blend-difference pointer-events-none">
